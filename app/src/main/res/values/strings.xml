@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Scrimmage</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Log In</string>
+    <string name="title_activity_sign_up">Sign Up</string>
+
+    <!-- Login and Sign Up activities -->
+    <string name="login_activity_login_button">Log In</string>
+    <string name="sign_up_activity_login_button">Sign Up</string>
+    <string name="login_activity_sign_up_label">or Sign Up!</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="email_hint">Email</string>
+    <string name="sign_up_error_message">Please make sure you enter a username, password, and email address</string>
+    <string name="sign_up_error_title">Oops!</string>
+    <string name="login_error_message">Please make sure you enter a username and password</string>
+    <string name="login_error_title">Oops!</string>
+
+    <!-- Game Activity -->
+    <string name="action_menu_create_scrimmage_label">Create Scrimmage</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="going_image_content_description">Going</string>
+
+    <!-- Create Game Activity -->
+    <string name="title_activity_create_game">CreateGameActivity</string>
+    <string name="location_label">Location</string>
+    <string name="title_label">Title</string>
+    <string name="description_label">Description</string>
+    <string name="time_label">Time</string>
+    <string name="date_label">Date</string>
+    <string name="submit_button_label">Create Scrimmage</string>
+    <string name="success_message">Scrimmage created!</string>
+    <string name="location_image_content_description">Location Image</string>
+
+    <!-- Navigation Drawer -->
+    <string-array name="nav_drawer_labels">
+        <item>Home</item>
+        <item>Games</item>
+        <item>My Account</item>
+    </string-array>
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_menu_home</item>
+        <item>@drawable/ic_action_football</item>
+        <item>@drawable/perm_group_accounts</item>
+    </array>
+
+    <!-- Errors -->
+    <string name="generic_error_title">Oops!</string>
+    <string name="generic_error_message">An error occurred</string>
+    <string name="create_game_error_message">There was an error in creating your scrimmage :( Please try again.</string>
+    <string name="title_activity_maptest">maptest</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_view_game">ViewGameActivity</string>
+
+</resources>

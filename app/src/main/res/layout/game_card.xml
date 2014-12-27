@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/locationImage"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:contentDescription="@string/location_image_content_description"
+            android:scaleType="fitXY"
+            android:src="@drawable/hipsterlogogenerator_1419366479942" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Swag"
+            android:textSize="40sp"
+            android:id="@+id/titleTextView"
+            android:layout_alignBottom="@id/locationImage"/>
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:text="ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            android:layout_below="@id/locationImage"
+            android:id="@+id/descriptionCardTextView"/>
+        <TextView
+            android:layout_width="225dp"
+            android:layout_height="30dp"
+            android:text="Going: "
+            android:layout_below="@id/locationImage"
+            android:layout_toEndOf="@id/descriptionCardTextView"
+            android:id="@+id/goingTextView"
+            android:textSize="20sp"/>
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:id="@+id/goingImageView1"
+            android:contentDescription="@string/going_image_content_description"
+            android:layout_toEndOf="@id/descriptionCardTextView"
+            android:layout_below="@id/goingTextView"
+            android:src="@drawable/avatar_empty"
+            /><!--use the avatar_empty from Ribbit -->
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:id="@+id/goingImageView2"
+            android:contentDescription="@string/going_image_content_description"
+            android:layout_toEndOf="@id/goingImageView1"
+            android:layout_below="@id/goingTextView"
+            android:src="@drawable/avatar_empty"
+            />
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:id="@+id/goingImageView3"
+            android:contentDescription="@string/going_image_content_description"
+            android:layout_toEndOf="@id/goingImageView2"
+            android:layout_below="@id/goingTextView"
+            android:src="@drawable/avatar_empty"
+            />
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:id="@+id/goingImageView4"
+            android:contentDescription="@string/going_image_content_description"
+            android:layout_toEndOf="@id/goingImageView3"
+            android:layout_below="@id/goingTextView"
+            android:src="@drawable/avatar_empty"
+            />
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

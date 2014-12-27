@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.sousheelvunnam.scrimmage.ui.GameActivity">
+    <item
+        android:id="@+id/action_create_scrimmage"
+        android:title="@string/action_menu_create_scrimmage_label"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_new"
+        />
+</menu>
