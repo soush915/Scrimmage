@@ -33,6 +33,7 @@ public class CreateGameActivity extends Activity {
     private Button mSubmitButton;
     private EditText mTitleEditText;
     private EditText mDescriptionEditText;
+    private EditText mSportEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +60,9 @@ public class CreateGameActivity extends Activity {
 
         mTitleEditText = (EditText) findViewById(R.id.titleEditText);
         mDescriptionEditText =(EditText) findViewById(R.id.descriptionEditText);
+        mSportEditText = (EditText) findViewById(R.id.sportEditText);
         mSubmitButton = (Button) findViewById(R.id.submitButton);
         mLocationImageButton =(ImageButton) findViewById(R.id.locationImageButton);
-
-
 
         mLocationImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +103,7 @@ public class CreateGameActivity extends Activity {
         String year = datePickerFragment.mYear;
         String hour = timePickerFragment.mHour;
         String minute = timePickerFragment.mMinute;
+        String sport = mSportEditText.getText().toString();
 
         ParseObject scrimmage = new ParseObject(ParseConstants.CLASS_SCRIMMAGES);
 
@@ -115,6 +116,7 @@ public class CreateGameActivity extends Activity {
         scrimmage.put(ParseConstants.KEY_SCRIMMAGE_YEAR, year);
         scrimmage.put(ParseConstants.KEY_SCRIMMAGE_HOUR, hour);
         scrimmage.put(ParseConstants.KEY_SCRIMMAGE_MINUTE, minute);
+        scrimmage.put(ParseConstants.KEY_SCRIMMAGE_SPORT, sport);
 
         return scrimmage;
     }

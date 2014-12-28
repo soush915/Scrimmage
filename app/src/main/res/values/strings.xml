@@ -35,6 +35,10 @@
     <string name="success_message">Scrimmage created!</string>
     <string name="location_image_content_description">Location Image</string>
 
+    <!-- View Game Activity -->
+    <string name="going_label">Going\:</string>
+    <string name="im_going_button">I\'m Going\!</string>
+
     <!-- Navigation Drawer -->
     <string-array name="nav_drawer_labels">
         <item>Home</item>

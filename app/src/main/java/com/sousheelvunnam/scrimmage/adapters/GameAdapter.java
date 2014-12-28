@@ -1,5 +1,6 @@
 package com.sousheelvunnam.scrimmage.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.parse.ParseObject;
 import com.sousheelvunnam.scrimmage.R;
+import com.sousheelvunnam.scrimmage.ui.ViewGameActivity;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
 import java.util.List;
@@ -38,10 +40,30 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     @Override
     public void onBindViewHolder(GameViewHolder holder, int position) {
         //Put data from parse objects in here and set text for textviews
-        ParseObject game = gameList.get(position);
+        final ParseObject game = gameList.get(position);
 
         holder.vTitle.setText(game.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
         holder.vDescription.setText(game.getString(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseObject scrimmage = game;
+
+                Intent intent = new Intent(v.getContext(), ViewGameActivity.class);
+                //intent.putExtra("OBJECT_ID", scrimmage.getObjectId());
+                intent.putExtra(ParseConstants.KEY_CREATOR_USERNAME, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_TITLE, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_DAY, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_DAY));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_MONTH, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_MONTH));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_YEAR, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_YEAR));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_MINUTE, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_MINUTE));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_HOUR, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_HOUR));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_SPORT, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_SPORT));
+                v.getContext().startActivity(intent);
+            }
+        });
 
     }
 

@@ -6,7 +6,65 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.sousheelvunnam.scrimmage.ui.ViewGameActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/viewGameLocationImage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/location_image_content_description"
+        android:src="@drawable/hipsterlogogenerator_1419366479942"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textSize="40sp"
+        android:layout_below="@id/viewGameLocationImage"
+        android:id="@+id/viewGameTitleTextView"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewGameTitleTextView"
+        android:text="Sport"
+        android:textSize="15sp"
+        android:id="@+id/viewGameSportTextView"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:id="@+id/viewGameDescriptionTextView"
+        android:layout_below="@id/viewGameSportTextView"
+        android:textSize="15sp"
+        android:text="ddddddddddd"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewGameGoingTextView"
+        android:text="@string/going_label"
+        android:layout_below="@id/viewGameDescriptionTextView"/>
+
+    <!-- People going and their profile images -->
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewGameGoingTextView"
+        android:id="@+id/imGoingButton"
+        android:text="@string/im_going_button"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewGameDateTimeTextView"
+        android:layout_below="@id/imGoingButton"
+        android:text="date + time"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="creator username"
+        android:id="@+id/viewGameCreatorTextView"
+        android:layout_below="@+id/viewGameDateTimeTextView"/>
 
 </RelativeLayout>
