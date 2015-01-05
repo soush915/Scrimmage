@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
@@ -45,18 +47,38 @@ public class ViewGameActivity extends Activity {
 
         retrieveData();
 
+        String objectId = getIntent().getStringExtra("OBJECT_ID");
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_SCRIMMAGES);
+        ParseObject game = null;
+        try {
+            game = query.get(objectId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        final ParseObject finalGame = game;
+
+        //if (finalGame.getString(ParseConstants))
         imGoingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if (finalGame !=null) {
+                    if (finalGame.getString(ParseConstants.KEY_RECIPIENTS_ID) == null) {
+                        finalGame.put(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
+                    }
+                    else {
+                        finalGame.addUnique(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
+                    }
+                    finalGame.saveInBackground();
+                    Toast.makeText(ViewGameActivity.this, R.string.im_going_success, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(ViewGameActivity.this, GameActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(ViewGameActivity.this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
+                }
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     @Override

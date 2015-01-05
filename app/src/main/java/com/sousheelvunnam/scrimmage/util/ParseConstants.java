@@ -11,6 +11,7 @@ public final class ParseConstants {
     //Field names
     public static final String KEY_CREATOR_ID = "creatorId";
     public static final String KEY_CREATOR_USERNAME = "creatorUsername";
+    public static final String KEY_RECIPIENTS_ID = "recipentsId";
     public static final String KEY_SCRIMMAGE_TITLE = "scrimmageTitle";
     public static final String KEY_SCRIMMAGE_DESCRIPTION = "scrimmageDescription";
     public static final String KEY_SCRIMMAGE_DAY = "scrimmageDay";

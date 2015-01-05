@@ -51,7 +51,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 ParseObject scrimmage = game;
 
                 Intent intent = new Intent(v.getContext(), ViewGameActivity.class);
-                //intent.putExtra("OBJECT_ID", scrimmage.getObjectId());
+                intent.putExtra("OBJECT_ID", scrimmage.getObjectId());
                 intent.putExtra(ParseConstants.KEY_CREATOR_USERNAME, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_TITLE, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION));

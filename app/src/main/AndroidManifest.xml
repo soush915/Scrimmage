@@ -67,6 +67,10 @@
             android:name=".ui.ViewGameActivity"
             android:label="@string/title_activity_view_game" >
         </activity>
+        <activity
+            android:name=".ui.MyAccountActivity"
+            android:label="@string/title_activity_my_account" >
+        </activity>
     </application>
 
 </manifest>

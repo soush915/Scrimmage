@@ -36,4 +36,11 @@ public class TimePickerFragment extends DialogFragment
         mMinute = minute + "";
 
     }
+
+    public String returnHour() {
+        return mHour;
+    }
+    public String returnMinute() {
+        return mMinute;
+    }
 }

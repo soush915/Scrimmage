@@ -36,11 +36,13 @@ public  class DatePickerFragment extends DialogFragment
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
+
         mYear = year + "";
         mMonth = month + "";
         mDay = day + "";
-
     }
+
+
 
     public String returnYear () {
         return mYear;

@@ -71,6 +71,10 @@ public class MyActivity extends Activity implements
         if (id == R.id.action_settings) {
             return true;
         }
+        else if (id == R.id.action_logout) {
+            ParseUser.logOut();
+            navigateToLogin();
+        }
         return super.onOptionsItemSelected(item);
     }
 
