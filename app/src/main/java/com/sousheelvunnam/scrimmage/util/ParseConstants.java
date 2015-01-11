@@ -21,4 +21,11 @@ public final class ParseConstants {
     public static final String KEY_SCRIMMAGE_MINUTE = "scrimmageMinute";
     public static final String KEY_SCRIMMAGE_SPORT = "scrimmageSport";
 
+    public static final String KEY_USER_ID = "userId";
+
+    public static final String KEY_FAVORITE_SPORT = "favoriteSport";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_BIO = "bio";
+    public static final String KEY_LOCATION = "location";
+    public static final String KEY_PHONE = "phone";
 }

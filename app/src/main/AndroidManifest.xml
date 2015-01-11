@@ -71,6 +71,14 @@
             android:name=".ui.MyAccountActivity"
             android:label="@string/title_activity_my_account" >
         </activity>
+        <activity
+            android:name=".ui.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:parentActivityName=".ui.MyAccountActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sousheelvunnam.scrimmage.ui.MyAccountActivity" />
+        </activity>
     </application>
 
 </manifest>

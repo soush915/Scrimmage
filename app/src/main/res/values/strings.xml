@@ -17,10 +17,12 @@
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="email_hint">Email</string>
-    <string name="sign_up_error_message">Please make sure you enter a username, password, and email address</string>
+    <string name="sign_up_error_message">Please make sure you fill in all of the required fields!</string>
     <string name="sign_up_error_title">Oops!</string>
     <string name="login_error_message">Please make sure you enter a username and password</string>
     <string name="login_error_title">Oops!</string>
+    <string name="favorite_sport_hint">Favorite Sport</string>
+    <string name="phone_hint">Phone Number</string>
 
     <!-- Game Activity -->
     <string name="action_menu_create_scrimmage_label">Create Scrimmage</string>
@@ -42,6 +44,26 @@
     <string name="going_label">Going:</string>
     <string name="im_going_button">I\'m Going!</string>
     <string name="im_going_success">Have fun!</string>
+
+    <!-- Account Activity -->
+    <string name="name_label">Name</string>
+    <string name="username_label">Username</string>
+    <string name="favorite_sport_label">Favorite Sport: </string>
+    <string name="bio_label">Bio: </string>
+    <string name="location_account_label">Location: </string>
+    <string name="contact_label">Contact Info: </string>
+    <string name="email_label">Email</string>
+    <string name="phone_label">Phone</string>
+    <string name="bio_empty">No bio!</string>
+    <string name="location_empty">No location!</string>
+    <string name="action_edit_profile">Edit Profile</string>
+
+    <!--Edit Profile Activity -->
+    <string name="bio_hint">Bio</string>
+    <string name="location_hint">Location</string>
+    <string name="current_location">Current Location</string>
+    <string name="save">Save</string>
+    <string name="account_success">Profile updated!</string>
 
     <!-- Navigation Drawer -->
     <string-array name="nav_drawer_labels">
@@ -65,5 +87,6 @@
     <string name="title_activity_view_game">ViewGameActivity</string>
     <string name="title_activity_date_picker_tesr">DatePIckerTesr</string>
     <string name="title_activity_my_account">MyAccountActivity</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
 
 </resources>

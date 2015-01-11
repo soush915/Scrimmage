@@ -64,7 +64,8 @@ public class ViewGameActivity extends Activity {
 
                 if (finalGame !=null) {
                     if (finalGame.getString(ParseConstants.KEY_RECIPIENTS_ID) == null) {
-                        finalGame.put(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
+                        String[] stringArray = {ParseUser.getCurrentUser().getObjectId(), " "};
+                        finalGame.put(ParseConstants.KEY_RECIPIENTS_ID, stringArray);
                     }
                     else {
                         finalGame.addUnique(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());

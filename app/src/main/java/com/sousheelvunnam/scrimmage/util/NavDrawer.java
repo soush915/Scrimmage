@@ -13,10 +13,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.adapters.NavDrawerListAdapter;
 import com.sousheelvunnam.scrimmage.model.NavDrawerItem;
 import com.sousheelvunnam.scrimmage.ui.GameActivity;
+import com.sousheelvunnam.scrimmage.ui.MyAccountActivity;
 import com.sousheelvunnam.scrimmage.ui.MyActivity;
 
 import java.util.ArrayList;
@@ -96,8 +98,14 @@ public class NavDrawer {
                         }
                         break;
                     case 2:
-                        /*Intent intent = new Intent(context, MyAccountActivity.class);
-                        startActivity(intent);*/
+                        if (context.getClass() == MyAccountActivity.class) {
+                            mDrawerLayout.closeDrawers();
+                        }
+                        else {
+                            Intent intent = new Intent(context, MyAccountActivity.class);
+                            intent.putExtra(ParseConstants.KEY_USER_ID, ParseUser.getCurrentUser().getObjectId());
+                            context.startActivity(intent);
+                        }
                         break;
                 }
             }

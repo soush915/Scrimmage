@@ -1,8 +1,16 @@
 package com.sousheelvunnam.scrimmage.ui;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -13,6 +21,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sousheelvunnam.scrimmage.R;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
@@ -26,8 +38,13 @@ public class MapsActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        buildGoogleApiClient();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
         setUpMapIfNeeded();
+        mGoogleApiClient.connect();
 
        /* mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
@@ -74,8 +91,7 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
@@ -88,20 +104,9 @@ public class MapsActivity extends FragmentActivity implements
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10), 500, null);
             }
         });
-        // Move the camera instantly to hamburg with a zoom of 15.
-
 
         // Zoom in, animating the camera.
         //mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-    }
-
-    //Needed for location API
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
     }
 
 
@@ -112,12 +117,22 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         //Gets last location of user - is usually the current
-        /*mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+        Toast.makeText(this, "SWIGGITY CONNECTED", Toast.LENGTH_LONG).show();
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
             mLastLocationLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocationLatLng, 15));
-        }*/
+            mMap.addMarker(new MarkerOptions().position(mLastLocationLatLng).title("WEEWEWEWEWEWEWEWEWEWEWEW"));
+        }
+        else {
+            LatLng latLng = new LatLng(0,0);
+            mMap.addMarker(new MarkerOptions().position(latLng).title("WEEWEWEWEWEWEWEWEWEWEWEW"));
+        }
+
+        Toast.makeText(this, "SWIGGITY CONNECTED END", Toast.LENGTH_LONG).show();
+
+
     }
     @Override
     public void onConnectionSuspended(int i) {
@@ -126,5 +141,118 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+        Toast.makeText(this, "SWIGGITY CONNECTED END", Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * A subclass of AsyncTask that calls getFromLocation() in the
+     * background. The class definition has these generic types:
+     * Location - A Location object containing
+     * the current location.
+     * Void     - indicates that progress units are not used
+     * String   - An address passed to onPostExecute()
+     */
+    private class GetAddressTask extends
+            AsyncTask<Location, Void, String> {
+        Context mContext;
+
+        public GetAddressTask(Context context) {
+            super();
+            mContext = context;
+        }
+
+        /**
+         * Get a Geocoder instance, get the latitude and longitude
+         * look up the address, and return it
+         *
+         * @return A string containing the address of the current
+         * location, or an empty string if no address can be found,
+         * or an error message
+         * @params params One or more Location objects
+         */
+        @Override
+        protected String doInBackground(Location... params) {
+            Geocoder geocoder =
+                    new Geocoder(mContext, Locale.getDefault());
+            // Get the current location from the input parameter list
+            Location loc = params[0];
+            // Create a list to contain the result address
+            List<Address> addresses = null;
+            try {
+                /*
+                 * Return 1 address.
+                 */
+                addresses = geocoder.getFromLocation(loc.getLatitude(),
+                        loc.getLongitude(), 1);
+            } catch (IOException e1) {
+                Log.e("LocationSampleActivity",
+                        "IO Exception in getFromLocation()");
+                e1.printStackTrace();
+                return ("IO Exception trying to get address");
+            } catch (IllegalArgumentException e2) {
+                // Error message to post in the log
+                String errorString = "Illegal arguments " +
+                        Double.toString(loc.getLatitude()) +
+                        " , " +
+                        Double.toString(loc.getLongitude()) +
+                        " passed to address service";
+                Log.e("LocationSampleActivity", errorString);
+                e2.printStackTrace();
+                return errorString;
+            }
+            // If the reverse geocode returned an address
+            if (addresses != null && addresses.size() > 0) {
+                // Get the first address
+                Address address = addresses.get(0);
+                /*
+                 * Format the first line of address (if available),
+                 * city, and country name.
+                 */
+                String addressText = String.format(
+                        "%s, %s, %s",
+                        // If there's a street address, add it
+                        address.getMaxAddressLineIndex() > 0 ?
+                                address.getAddressLine(0) : "",
+                        // Locality is usually a city
+                        address.getLocality(),
+                        // The country of the address
+                        address.getCountryName());
+                // Return the text
+                return addressText;
+            } else {
+                return "No address found";
+            }
+        }
+        /**
+         * A method that's called once doInBackground() completes. Turn
+         * off the indeterminate activity indicator and set
+         * the text of the UI element that shows the address. If the
+         * lookup failed, display the error message.
+         */
+        @Override
+        protected void onPostExecute(String address) {
+            // Set activity indicator visibility to "gone"
+            //mActivityIndicator.setVisibility(View.GONE);
+            // Display the results of the lookup.
+           // mAddress.setText(address);
+        }
+        public void getAddress(View v) {
+            // Ensure that a Geocoder services is available
+            if (Build.VERSION.SDK_INT >=
+                    Build.VERSION_CODES.GINGERBREAD
+                    &&
+                    Geocoder.isPresent()) {
+                // Show the activity indicator
+                //mActivityIndicator.setVisibility(View.VISIBLE);
+            /*
+             * Reverse geocoding is long-running and synchronous.
+             * Run it on a background thread.
+             * Pass the current location to the background task.
+             * When the task finishes,
+             * onPostExecute() displays the address.
+             */
+                (new GetAddressTask(MapsActivity.this)).execute(mLastLocation);
+            }
+        }
     }
 }
