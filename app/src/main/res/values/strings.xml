@@ -65,6 +65,16 @@
     <string name="save">Save</string>
     <string name="account_success">Profile updated!</string>
 
+    <!-- Maps Activity -->
+    <string name="action_search">Search</string>
+    <string name="search_title">Near You</string>
+    <string-array name="search_items">
+        <item>Parks</item>
+        <item>Gyms</item>
+    </string-array>
+    <string name="cancel">Cancel</string>
+    <string name="action_save_location">Save Location</string>
+
     <!-- Navigation Drawer -->
     <string-array name="nav_drawer_labels">
         <item>Home</item>

@@ -61,6 +61,11 @@ public class CreateGameActivity extends Activity {
         mTimeButton = (Button) findViewById(R.id.timeButton);
         mLocationImageButton =(ImageButton) findViewById(R.id.locationImageButton);
 
+        Intent locationImageIntent = getIntent();
+        if (locationImageIntent != null) {
+            //TODO get bitmap image of map and put here
+        }
+
         mLocationImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

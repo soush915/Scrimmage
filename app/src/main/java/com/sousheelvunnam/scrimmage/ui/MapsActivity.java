@@ -1,14 +1,21 @@
 package com.sousheelvunnam.scrimmage.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,12 +26,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
 
 import java.io.IOException;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
@@ -33,6 +45,10 @@ public class MapsActivity extends FragmentActivity implements
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LatLng mLastLocationLatLng;
+    private Marker mScrimmageLocationMarker;
+    private LatLng mFinalLocation;
+    private Bitmap mLocationBitmap;
+    private String mAddress = "No address found";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +62,7 @@ public class MapsActivity extends FragmentActivity implements
         setUpMapIfNeeded();
         mGoogleApiClient.connect();
 
-       /* mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            mLastLocationLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        }
-        if (mLastLocationLatLng !=null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocationLatLng, 15));
-        }*/
+
     }
 
     @Override
@@ -97,16 +106,22 @@ public class MapsActivity extends FragmentActivity implements
      */
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
-            public void onMapClick(LatLng latLng) {
-                mMap.addMarker(new MarkerOptions().position(latLng).title("YE MUM"));
+            public void onMapLongClick(LatLng latLng) {
+                //Reverse geocodes address from location of marker
+                mMap.clear();
+                if (Build.VERSION.SDK_INT >=
+                        Build.VERSION_CODES.GINGERBREAD
+                        &&
+                        Geocoder.isPresent()) {
+                    (new GetAddressTask(MapsActivity.this)).execute(latLng);
+                }
+                mScrimmageLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(mAddress));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10), 500, null);
+                mFinalLocation = latLng;
             }
         });
-
-        // Zoom in, animating the camera.
-        //mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
     }
 
 
@@ -122,17 +137,16 @@ public class MapsActivity extends FragmentActivity implements
                 mGoogleApiClient);
         if (mLastLocation != null) {
             mLastLocationLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocationLatLng, 15));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocationLatLng, 12));
             mMap.addMarker(new MarkerOptions().position(mLastLocationLatLng).title("WEEWEWEWEWEWEWEWEWEWEWEW"));
+            mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                @Override
+                public void onSnapshotReady(Bitmap bitmap) {
+                    mLocationBitmap = bitmap;
+                    //TODO get bitmap to work somehow by passing location through intent and recreating picture on other side
+                }
+            });
         }
-        else {
-            LatLng latLng = new LatLng(0,0);
-            mMap.addMarker(new MarkerOptions().position(latLng).title("WEEWEWEWEWEWEWEWEWEWEWEW"));
-        }
-
-        Toast.makeText(this, "SWIGGITY CONNECTED END", Toast.LENGTH_LONG).show();
-
-
     }
     @Override
     public void onConnectionSuspended(int i) {
@@ -141,8 +155,17 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
-        Toast.makeText(this, "SWIGGITY CONNECTED END", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Connection failed. Please try again.", Toast.LENGTH_LONG).show();
     }
+
+
+
+
+
+
+
+
+
 
     /**
      * A subclass of AsyncTask that calls getFromLocation() in the
@@ -153,7 +176,7 @@ public class MapsActivity extends FragmentActivity implements
      * String   - An address passed to onPostExecute()
      */
     private class GetAddressTask extends
-            AsyncTask<Location, Void, String> {
+            AsyncTask<LatLng, Void, String> {
         Context mContext;
 
         public GetAddressTask(Context context) {
@@ -171,19 +194,19 @@ public class MapsActivity extends FragmentActivity implements
          * @params params One or more Location objects
          */
         @Override
-        protected String doInBackground(Location... params) {
+        protected String doInBackground(LatLng... params) {
             Geocoder geocoder =
                     new Geocoder(mContext, Locale.getDefault());
             // Get the current location from the input parameter list
-            Location loc = params[0];
+            LatLng latlng = params[0];
             // Create a list to contain the result address
-            List<Address> addresses = null;
+            List<Address> address = null;
             try {
                 /*
                  * Return 1 address.
                  */
-                addresses = geocoder.getFromLocation(loc.getLatitude(),
-                        loc.getLongitude(), 1);
+                address = geocoder.getFromLocation(latlng.latitude,
+                        latlng.longitude, 1);
             } catch (IOException e1) {
                 Log.e("LocationSampleActivity",
                         "IO Exception in getFromLocation()");
@@ -191,19 +214,19 @@ public class MapsActivity extends FragmentActivity implements
                 return ("IO Exception trying to get address");
             } catch (IllegalArgumentException e2) {
                 // Error message to post in the log
-                String errorString = "Illegal arguments " +
+                /*String errorString = "Illegal arguments " +
                         Double.toString(loc.getLatitude()) +
                         " , " +
                         Double.toString(loc.getLongitude()) +
                         " passed to address service";
                 Log.e("LocationSampleActivity", errorString);
                 e2.printStackTrace();
-                return errorString;
+                return errorString;*/
             }
             // If the reverse geocode returned an address
-            if (addresses != null && addresses.size() > 0) {
+            if (address != null) {
                 // Get the first address
-                Address address = addresses.get(0);
+                Address mainAddress = address.get(0);
                 /*
                  * Format the first line of address (if available),
                  * city, and country name.
@@ -211,12 +234,12 @@ public class MapsActivity extends FragmentActivity implements
                 String addressText = String.format(
                         "%s, %s, %s",
                         // If there's a street address, add it
-                        address.getMaxAddressLineIndex() > 0 ?
-                                address.getAddressLine(0) : "",
+                        mainAddress.getMaxAddressLineIndex() > 0 ?
+                                mainAddress.getAddressLine(0) : "",
                         // Locality is usually a city
-                        address.getLocality(),
+                        mainAddress.getLocality(),
                         // The country of the address
-                        address.getCountryName());
+                        mainAddress.getCountryName());
                 // Return the text
                 return addressText;
             } else {
@@ -234,25 +257,78 @@ public class MapsActivity extends FragmentActivity implements
             // Set activity indicator visibility to "gone"
             //mActivityIndicator.setVisibility(View.GONE);
             // Display the results of the lookup.
-           // mAddress.setText(address);
+           mAddress = address;
         }
-        public void getAddress(View v) {
-            // Ensure that a Geocoder services is available
-            if (Build.VERSION.SDK_INT >=
-                    Build.VERSION_CODES.GINGERBREAD
-                    &&
-                    Geocoder.isPresent()) {
-                // Show the activity indicator
-                //mActivityIndicator.setVisibility(View.VISIBLE);
-            /*
-             * Reverse geocoding is long-running and synchronous.
-             * Run it on a background thread.
-             * Pass the current location to the background task.
-             * When the task finishes,
-             * onPostExecute() displays the address.
-             */
-                (new GetAddressTask(MapsActivity.this)).execute(mLastLocation);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_maps, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_search) {
+            /*AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+            builder.setTitle(R.string.search_title)
+                    .setSingleChoiceItems(R.array.search_items, null, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setPositiveButton(R.string.action_search, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            builder.create();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            Uri gmmURi = new Uri;
+            Intent parkIntent = new Intent(Intent.ACTION_VIEW, gmmURi);*/
+            return true;
+        }
+        else if (id == R.id.action_save_location) {
+            Intent saveIntent = new Intent(MapsActivity.this, CreateGameActivity.class);
+            if (mFinalLocation != null && mLocationBitmap != null) {
+                saveIntent.putExtra("locationLatitude", mFinalLocation.latitude);
+                saveIntent.putExtra("locationLongitude", mFinalLocation.longitude);
+
+                //TODO pass location through to other side then create as ParseGeoPoint
             }
+            else {
+                saveIntent.putExtra("locationLatitude", "null");
+                saveIntent.putExtra("locationLongitude", "null");
+                saveIntent.putExtra("locationBitmap", "null");
+            }
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
