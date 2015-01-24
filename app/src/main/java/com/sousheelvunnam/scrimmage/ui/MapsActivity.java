@@ -118,8 +118,14 @@ public class MapsActivity extends FragmentActivity implements
                     (new GetAddressTask(MapsActivity.this)).execute(latLng);
                 }
                 mScrimmageLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(mAddress));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10), 500, null);
-                mFinalLocation = latLng;
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17), 500, null);
+                mFinalLocation = latLng;mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(Bitmap bitmap) {
+                        mLocationBitmap = bitmap;
+                        //TODO get bitmap to work somehow by passing location through intent and recreating picture on other side
+                    }
+                });
             }
         });
     }
@@ -137,15 +143,8 @@ public class MapsActivity extends FragmentActivity implements
                 mGoogleApiClient);
         if (mLastLocation != null) {
             mLastLocationLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocationLatLng, 12));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLastLocationLatLng, 17));
             mMap.addMarker(new MarkerOptions().position(mLastLocationLatLng).title("WEEWEWEWEWEWEWEWEWEWEWEW"));
-            mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                @Override
-                public void onSnapshotReady(Bitmap bitmap) {
-                    mLocationBitmap = bitmap;
-                    //TODO get bitmap to work somehow by passing location through intent and recreating picture on other side
-                }
-            });
         }
     }
     @Override
@@ -175,7 +174,7 @@ public class MapsActivity extends FragmentActivity implements
      * Void     - indicates that progress units are not used
      * String   - An address passed to onPostExecute()
      */
-    private class GetAddressTask extends
+    public class GetAddressTask extends
             AsyncTask<LatLng, Void, String> {
         Context mContext;
 
@@ -254,9 +253,6 @@ public class MapsActivity extends FragmentActivity implements
          */
         @Override
         protected void onPostExecute(String address) {
-            // Set activity indicator visibility to "gone"
-            //mActivityIndicator.setVisibility(View.GONE);
-            // Display the results of the lookup.
            mAddress = address;
         }
     }
@@ -309,14 +305,16 @@ public class MapsActivity extends FragmentActivity implements
                     });
             builder.create();
             AlertDialog dialog = builder.create();
-            dialog.show();
-            Uri gmmURi = new Uri;
-            Intent parkIntent = new Intent(Intent.ACTION_VIEW, gmmURi);*/
-            return true;
+            dialog.show();*/
+
+            Uri gmmURi = Uri.parse("geo:" + mLastLocationLatLng.latitude + "," + mLastLocationLatLng.longitude + "?z=10&q=parks");;
+            Intent parkIntent = new Intent(Intent.ACTION_VIEW, gmmURi);
+            parkIntent.setPackage("com.google.android.apps.maps");
+            startActivity(parkIntent);
         }
         else if (id == R.id.action_save_location) {
             Intent saveIntent = new Intent(MapsActivity.this, CreateGameActivity.class);
-            if (mFinalLocation != null && mLocationBitmap != null) {
+            /*if (mFinalLocation != null /*&& mLocationBitmap != null) {
                 saveIntent.putExtra("locationLatitude", mFinalLocation.latitude);
                 saveIntent.putExtra("locationLongitude", mFinalLocation.longitude);
 
@@ -325,9 +323,16 @@ public class MapsActivity extends FragmentActivity implements
             else {
                 saveIntent.putExtra("locationLatitude", "null");
                 saveIntent.putExtra("locationLongitude", "null");
-                saveIntent.putExtra("locationBitmap", "null");
-            }
-            return true;
+            }*/
+            final float densityMultiplier = MapsActivity.this.getResources().getDisplayMetrics().density;
+            int h= (int) (250*densityMultiplier);
+            int w= (int) (h * mLocationBitmap.getWidth()/((double) mLocationBitmap.getHeight()));
+            mLocationBitmap = Bitmap.createScaledBitmap(mLocationBitmap, w, h, true);
+            saveIntent.putExtra("bitmap", mLocationBitmap);
+            saveIntent.putExtra("locationLatitude", mFinalLocation.latitude);
+            saveIntent.putExtra("locationLongitude", mFinalLocation.longitude);
+            saveIntent.putExtra("address", mAddress);
+            startActivity(saveIntent);
         }
         return super.onOptionsItemSelected(item);
     }

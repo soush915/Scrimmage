@@ -20,6 +20,9 @@ public final class ParseConstants {
     public static final String KEY_SCRIMMAGE_HOUR = "scrimmageHour";
     public static final String KEY_SCRIMMAGE_MINUTE = "scrimmageMinute";
     public static final String KEY_SCRIMMAGE_SPORT = "scrimmageSport";
+    public static final String KEY_SCRIMMAGE_ADDRESS = "scrimmageAddress";
+    public static final String KEY_SCRIMMAGE_LATLNG = "scrimmageLatLng";
+    public static final String KEY_SCRIMMAGE_PICTURE = "scrimmagePicture";
 
     public static final String KEY_USER_ID = "userId";
 

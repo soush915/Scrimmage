@@ -58,7 +58,7 @@
     <string name="location_empty">No location!</string>
     <string name="action_edit_profile">Edit Profile</string>
 
-    <!--Edit Profile Activity -->
+    <!-- Edit Profile Activity -->
     <string name="bio_hint">Bio</string>
     <string name="location_hint">Location</string>
     <string name="current_location">Current Location</string>
@@ -68,10 +68,12 @@
     <!-- Maps Activity -->
     <string name="action_search">Search</string>
     <string name="search_title">Near You</string>
+
     <string-array name="search_items">
         <item>Parks</item>
         <item>Gyms</item>
     </string-array>
+
     <string name="cancel">Cancel</string>
     <string name="action_save_location">Save Location</string>
 
@@ -98,5 +100,6 @@
     <string name="title_activity_date_picker_tesr">DatePIckerTesr</string>
     <string name="title_activity_my_account">MyAccountActivity</string>
     <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_snapshot_test">SnapshotTestActivity</string>
 
 </resources>
