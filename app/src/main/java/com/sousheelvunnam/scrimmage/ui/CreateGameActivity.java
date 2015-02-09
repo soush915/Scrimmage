@@ -9,11 +9,13 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,21 +28,22 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.sousheelvunnam.scrimmage.R;
-import com.sousheelvunnam.scrimmage.fragments.DatePickerFragment;
-import com.sousheelvunnam.scrimmage.fragments.TimePickerFragment;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CreateGameActivity extends Activity {
+public class CreateGameActivity extends ActionBarActivity {
 
     private ImageButton mLocationImageButton;
     private Button mSubmitButton;
@@ -54,12 +57,10 @@ public class CreateGameActivity extends Activity {
     private ParseGeoPoint mLatLng;
     private String mAddress;
     private String mDay;
-    private String mMonth ;
-    private  String mYear;
+    private String mMonth;
+    private String mYear;
     private String mHour;
     private String mMinute;
-
-    private Bitmap mBitmap;
 
     private ParseObject mScrimmage;
 
@@ -70,12 +71,12 @@ public class CreateGameActivity extends Activity {
 
 
         mTitleEditText = (EditText) findViewById(R.id.titleEditText);
-        mDescriptionEditText =(EditText) findViewById(R.id.descriptionEditText);
+        mDescriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
         mSportEditText = (EditText) findViewById(R.id.sportEditText);
         mSubmitButton = (Button) findViewById(R.id.submitButton);
         mDateButton = (Button) findViewById(R.id.dateButton);
         mTimeButton = (Button) findViewById(R.id.timeButton);
-        mLocationImageButton =(ImageButton) findViewById(R.id.locationImageButton);
+        mLocationImageButton = (ImageButton) findViewById(R.id.locationImageButton);
         mAddressTextView = (TextView) findViewById(R.id.addressText);
 
 
@@ -92,14 +93,13 @@ public class CreateGameActivity extends Activity {
             @Override
             public void onClick(View v) {
                 ParseObject scrimmage = createScrimmage();
-                if (scrimmage==null) {
+                if (scrimmage == null) {
                     //error
                     AlertDialog.Builder builder = new AlertDialog.Builder(CreateGameActivity.this);
                     builder.setMessage(R.string.generic_error_message).setTitle(R.string.generic_error_title).setPositiveButton(android.R.string.ok, null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                }
-                else {
+                } else {
                     save(scrimmage);
                     Intent intent = new Intent(CreateGameActivity.this, GameActivity.class);
                     startActivity(intent);
@@ -123,13 +123,14 @@ public class CreateGameActivity extends Activity {
                 mDialog.show();
             }
         });
+
+        mScrimmage = new ParseObject(ParseConstants.CLASS_SCRIMMAGES);
     }
 
     private void updateAddress() {
         Intent locationIntent = getIntent();
         /*String address = "";
         if (locationIntent != null) {
-            //TODO get bitmap image of map and put here and reverse geocode address at point given
             Double latitude = locationIntent.getDoubleExtra("locationLatitude", 0);
             Double longitude = locationIntent.getDoubleExtra("locationLongitude", 0);
 
@@ -156,11 +157,20 @@ public class CreateGameActivity extends Activity {
         mLatLng = new ParseGeoPoint(latitude, longitude);
         String address = locationIntent.getStringExtra("address");
         mAddress = address;
-        mAddressTextView.setText(address + ", " + latitudeeS + ", " +longitudeS);
+        mAddressTextView.setText(address + ", " + latitudeeS + ", " + longitudeS);
 
-        Bitmap bitmap = locationIntent.getParcelableExtra("bitmap");
-        mLocationImageButton.setImageBitmap(bitmap);
-        mBitmap = bitmap;
+        if (locationIntent.getStringExtra("from").equals("MapsActivity")) {
+            final byte[] byteArray = locationIntent.getExtras().getByteArray("pictureByteArray");
+            final ParseFile file = new ParseFile("bitmaplocationpic", byteArray);
+            file.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_PICTURE, file);
+                    Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    mLocationImageButton.setImageBitmap(bmp);
+                }
+            });
+        }
     }
 
 
@@ -176,21 +186,16 @@ public class CreateGameActivity extends Activity {
         String description = mDescriptionEditText.getText().toString();
         String sport = mSportEditText.getText().toString();
 
-        mScrimmage = new ParseObject(ParseConstants.CLASS_SCRIMMAGES);
-
         mScrimmage.put(ParseConstants.KEY_CREATOR_ID, ParseUser.getCurrentUser().getObjectId());
         mScrimmage.put(ParseConstants.KEY_CREATOR_USERNAME, ParseUser.getCurrentUser().getUsername());
         mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_TITLE, title);
         mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION, description);
-        mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_DAY, mDay);
-        mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_MONTH, mMonth);
-        mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_YEAR, mYear);
-        mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_HOUR, mHour);
-        mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_MINUTE, mMinute);
         mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_SPORT, sport);
         mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_ADDRESS, mAddress);
         mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_LATLNG, mLatLng);
-        mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_PICTURE, mBitmap);
+        Calendar calendar = new GregorianCalendar(Integer.parseInt(mYear), Integer.parseInt(mMonth), Integer.parseInt(mDay), Integer.parseInt(mHour), Integer.parseInt(mMinute));
+        Date date = new Date(calendar.getTimeInMillis());
+        mScrimmage.put(ParseConstants.KEY_SCRIMMAGE_DATE, date);
 
         return mScrimmage;
     }
@@ -199,11 +204,10 @@ public class CreateGameActivity extends Activity {
         scrimmage.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e==null) {
+                if (e == null) {
                     //success
                     Toast.makeText(CreateGameActivity.this, R.string.success_message, Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(CreateGameActivity.this);
                     builder.setMessage(R.string.create_game_error_message).setTitle(R.string.generic_error_title).setPositiveButton(android.R.string.ok, null);
                     AlertDialog dialog = builder.create();

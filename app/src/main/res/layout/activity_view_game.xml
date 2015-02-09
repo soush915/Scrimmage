@@ -36,7 +36,7 @@
         android:id="@+id/viewGameDescriptionTextView"
         android:layout_below="@id/viewGameSportTextView"
         android:textSize="15sp"
-        android:text="ddddddddddd"/>
+        android:text="Description"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,5 +66,21 @@
         android:text="creator username"
         android:id="@+id/viewGameCreatorTextView"
         android:layout_below="@+id/viewGameDateTimeTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:id="@+id/viewGameAddressText"
+        android:layout_below="@+id/viewGameCreatorTextView"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D"
+        android:id="@+id/directionsButton"
+        android:layout_below="@+id/viewGameDateTimeTextView"
+        android:layout_alignEnd="@+id/viewGameDateTimeTextView" />
 
 </RelativeLayout>

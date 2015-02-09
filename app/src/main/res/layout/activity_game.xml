@@ -1,4 +1,5 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -13,21 +14,31 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.sousheelvunnam.scrimmage.ui.GameActivity">
 
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationSpinner"
+            android:spinnerMode="dropdown"
+            android:layout_alignParentRight="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/locationSpinner"
+            android:text="@string/miles"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cardList"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_below="@id/locationSpinner"/>
 
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/left_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
+    <fragment android:id="@+id/navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#111"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:name="com.sousheelvunnam.scrimmage.ui.fragments.NavDrawerFragmentGames"
+        tools:layout="@layout/fragment_nav_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

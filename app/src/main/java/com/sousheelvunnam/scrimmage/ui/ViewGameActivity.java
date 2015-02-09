@@ -2,6 +2,7 @@ package com.sousheelvunnam.scrimmage.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,7 +24,7 @@ import com.sousheelvunnam.scrimmage.util.ParseConstants;
 import java.util.Date;
 import java.util.List;
 
-public class ViewGameActivity extends Activity {
+public class ViewGameActivity extends ActionBarActivity {
 
     private ImageView locationImage;
     private TextView titleTextView;
@@ -31,7 +32,10 @@ public class ViewGameActivity extends Activity {
     private TextView descriptionTextView;
     private TextView dateTimeTextView;
     private TextView usernameTextView;
+    private TextView addreassTextView;
+    private Button directionsButton;
     private Button imGoingButton;
+    private String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,8 @@ public class ViewGameActivity extends Activity {
         dateTimeTextView = (TextView) findViewById(R.id.viewGameDateTimeTextView);
         usernameTextView = (TextView) findViewById(R.id.viewGameCreatorTextView);
         imGoingButton = (Button) findViewById(R.id.imGoingButton);
+        addreassTextView = (TextView) findViewById(R.id.viewGameAddressText);
+        directionsButton = (Button) findViewById(R.id.directionsButton);
 
         retrieveData();
 
@@ -62,22 +68,25 @@ public class ViewGameActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                if (finalGame !=null) {
-                    if (finalGame.getString(ParseConstants.KEY_RECIPIENTS_ID) == null) {
-                        String[] stringArray = {ParseUser.getCurrentUser().getObjectId(), " "};
-                        finalGame.put(ParseConstants.KEY_RECIPIENTS_ID, stringArray);
-                    }
-                    else {
-                        finalGame.addUnique(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
-                    }
+                if (finalGame != null) {
+                    finalGame.addUnique(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
                     finalGame.saveInBackground();
                     Toast.makeText(ViewGameActivity.this, R.string.im_going_success, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(ViewGameActivity.this, GameActivity.class);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     Toast.makeText(ViewGameActivity.this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        directionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("geo:0,0").buildUpon().appendQueryParameter("q", address).build();
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
             }
         });
     }
@@ -110,20 +119,18 @@ public class ViewGameActivity extends Activity {
         String title = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_TITLE);
         String description = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION);
         String sport = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_SPORT);
-        String day = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_DAY);
-        String month = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_MONTH);
-        String year = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_YEAR);
-        String minute = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_MINUTE);
-        String hour = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_HOUR);
+        address = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_ADDRESS);
 
-        Date date = new Date(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day),  Integer.parseInt(minute), Integer.parseInt(hour));
+
+        Date date = new Date();
+        date.setTime(intent.getLongExtra(ParseConstants.KEY_SCRIMMAGE_DATE, -1));
 
         titleTextView.setText(title);
         descriptionTextView.setText(description);
         sportTextView.setText(sport);
         dateTimeTextView.setText(date.toString());
         usernameTextView.setText(username);
-
+        addreassTextView.setText(address);
     }
 
     /*private String[] retrieveData() {

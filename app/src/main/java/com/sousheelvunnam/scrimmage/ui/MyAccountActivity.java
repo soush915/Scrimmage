@@ -2,8 +2,11 @@ package com.sousheelvunnam.scrimmage.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.internal.widget.ActionBarOverlayLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,9 +18,13 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
+import com.sousheelvunnam.scrimmage.ui.fragments.NavDrawerFragment;
+import com.sousheelvunnam.scrimmage.ui.fragments.NavDrawerFragmentGames;
+import com.sousheelvunnam.scrimmage.ui.fragments.NavDrawerFragmentMyAccount;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
-public class MyAccountActivity extends Activity {
+public class MyAccountActivity extends ActionBarActivity implements
+                NavDrawerFragmentMyAccount.NavigationDrawerCallbacks{
 
     private TextView mNameTextView;
     private TextView mUsernameTextView;
@@ -26,12 +33,19 @@ public class MyAccountActivity extends Activity {
     private TextView mLocationTextView;
     private TextView mEmailTextView;
     private TextView mPhoneTextView;
-
+    private NavDrawerFragmentMyAccount mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
+
+        mNavigationDrawerFragment = (NavDrawerFragmentMyAccount)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
 
         mNameTextView = (TextView) findViewById(R.id.nameTextView);
         mUsernameTextView = (TextView) findViewById(R.id.usernameTextView);
@@ -67,19 +81,49 @@ public class MyAccountActivity extends Activity {
     }
 
 
+    /**
+     * Start of stuff from Nav Drawer
+     */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        Intent intent = getIntent();
-        String objectId = intent.getStringExtra(ParseConstants.KEY_USER_ID);
-        if (objectId.equals(ParseUser.getCurrentUser().getObjectId())) {
-            getMenuInflater().inflate(R.menu.menu_my_account, menu);
-            return true;
+    public void onNavigationDrawerItemSelected(int position) {
+        if (position == 0) {
+            Intent intent = new Intent(this, MyActivity.class);
+            startActivity(intent);
         }
-        else {
-            return true;
+        else if (position == 1) {
+            Intent intent = new Intent(this, GameActivity.class);
+            startActivity(intent);
         }
     }
+    public void restoreActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(R.string.title_activity_my_account);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Inflate the menu; this adds items to the action bar if it is present.if (!mNavigationDrawerFragment.isDrawerOpen()) {
+            // Only show items in the action bar relevant to this screen
+            // if the drawer is not showing. Otherwise, let the drawer
+            // decide what to show in the action bar.
+            Intent intent = getIntent();
+            String objectId = intent.getStringExtra(ParseConstants.KEY_USER_ID);
+            if (objectId.equals(ParseUser.getCurrentUser().getObjectId())) {
+                getMenuInflater().inflate(R.menu.menu_my_account, menu);
+                restoreActionBar();
+                return true;
+            }
+            else {
+                restoreActionBar();
+                return true;
+            }
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

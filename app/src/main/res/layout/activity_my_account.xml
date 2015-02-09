@@ -1,94 +1,106 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.sousheelvunnam.scrimmage.ui.MyAccountActivity">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/accountImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/avatar_empty" />
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.sousheelvunnam.scrimmage.ui.MyAccountActivity">
 
-    <TextView
-        android:id="@+id/nameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/accountImageView"
-        android:text="@string/name_label" />
+        <ImageView
+            android:id="@+id/accountImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/avatar_empty" />
 
-    <TextView
-        android:id="@+id/usernameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/nameTextView"
-        android:layout_toEndOf="@+id/accountImageView"
-        android:text="@string/username_label" />
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/accountImageView"
+            android:text="@string/name_label" />
 
-    <TextView
-        android:id="@+id/favoriteSportLabelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/accountImageView"
-        android:text="@string/favorite_sport_label" />
+        <TextView
+            android:id="@+id/usernameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nameTextView"
+            android:layout_toEndOf="@+id/accountImageView"
+            android:text="@string/username_label" />
 
-    <TextView
-        android:id="@+id/favoriteSportTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/favoriteSportLabelTextView"/>
+        <TextView
+            android:id="@+id/favoriteSportLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/accountImageView"
+            android:text="@string/favorite_sport_label" />
 
-    <TextView
-        android:id="@+id/bioLabelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/favoriteSportTextView"
-        android:text="@string/bio_label" />
+        <TextView
+            android:id="@+id/favoriteSportTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/favoriteSportLabelTextView" />
 
-    <TextView
-        android:id="@+id/bioTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/bioLabelTextView"
-        android:text="@string/bio_empty"/>
+        <TextView
+            android:id="@+id/bioLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/favoriteSportTextView"
+            android:text="@string/bio_label" />
 
-    <TextView
-        android:id="@+id/locationLabelAccountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bioTextView"
-        android:text="@string/location_account_label" />
+        <TextView
+            android:id="@+id/bioTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bioLabelTextView"
+            android:text="@string/bio_empty" />
 
-    <TextView
-        android:id="@+id/locationAccountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/locationLabelAccountTextView"
-        android:text="@string/location_empty"/>
+        <TextView
+            android:id="@+id/locationLabelAccountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bioTextView"
+            android:text="@string/location_account_label" />
 
-    <TextView
-        android:id="@+id/contactTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/locationAccountTextView"
-        android:text="@string/contact_label" />
+        <TextView
+            android:id="@+id/locationAccountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/locationLabelAccountTextView"
+            android:text="@string/location_empty" />
 
-    <TextView
-        android:id="@+id/emailTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/contactTextView"
-        android:text="@string/email_label" />
+        <TextView
+            android:id="@+id/contactTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/locationAccountTextView"
+            android:text="@string/contact_label" />
 
-    <TextView
-        android:id="@+id/phoneTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/emailTextView"
-        android:text="@string/phone_label" />
+        <TextView
+            android:id="@+id/emailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/contactTextView"
+            android:text="@string/email_label" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/phoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailTextView"
+            android:text="@string/phone_label" />
+
+    </RelativeLayout>
+
+    <fragment android:id="@+id/navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="com.sousheelvunnam.scrimmage.ui.fragments.NavDrawerFragmentMyAccount"
+        tools:layout="@layout/fragment_nav_drawer" />
+</android.support.v4.widget.DrawerLayout>

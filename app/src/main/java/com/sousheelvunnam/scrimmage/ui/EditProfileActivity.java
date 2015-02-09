@@ -19,7 +19,7 @@ import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
-public class EditProfileActivity extends Activity implements
+public class EditProfileActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private GoogleApiClient mGoogleApiClient;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,7 @@ import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.ScrimmageApplication;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends ActionBarActivity {
 
     protected TextView mSignUpTextView;
     protected EditText mUsername;

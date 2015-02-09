@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,6 +16,8 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +32,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.sousheelvunnam.scrimmage.R;
+import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.BitSet;
 import java.util.List;
@@ -118,12 +129,13 @@ public class MapsActivity extends FragmentActivity implements
                     (new GetAddressTask(MapsActivity.this)).execute(latLng);
                 }
                 mScrimmageLocationMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(mAddress));
+                mScrimmageLocationMarker.hideInfoWindow();
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17), 500, null);
-                mFinalLocation = latLng;mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                mFinalLocation = latLng;
+                mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
                     @Override
                     public void onSnapshotReady(Bitmap bitmap) {
                         mLocationBitmap = bitmap;
-                        //TODO get bitmap to work somehow by passing location through intent and recreating picture on other side
                     }
                 });
             }
@@ -317,21 +329,28 @@ public class MapsActivity extends FragmentActivity implements
             /*if (mFinalLocation != null /*&& mLocationBitmap != null) {
                 saveIntent.putExtra("locationLatitude", mFinalLocation.latitude);
                 saveIntent.putExtra("locationLongitude", mFinalLocation.longitude);
-
-                //TODO pass location through to other side then create as ParseGeoPoint
             }
             else {
                 saveIntent.putExtra("locationLatitude", "null");
                 saveIntent.putExtra("locationLongitude", "null");
             }*/
-            final float densityMultiplier = MapsActivity.this.getResources().getDisplayMetrics().density;
-            int h= (int) (250*densityMultiplier);
-            int w= (int) (h * mLocationBitmap.getWidth()/((double) mLocationBitmap.getHeight()));
-            mLocationBitmap = Bitmap.createScaledBitmap(mLocationBitmap, w, h, true);
-            saveIntent.putExtra("bitmap", mLocationBitmap);
+            Resources r = getResources();
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 250, r.getDisplayMetrics());
+            float roundedpx = Math.round(px);
+            int height = (int)roundedpx;
+            int bitmapStartHeight = ((mLocationBitmap.getHeight() / 2) - (height/2));
+            Bitmap finalBitmap = Bitmap.createBitmap(mLocationBitmap, 0, bitmapStartHeight, mLocationBitmap.getWidth(), height);
+            final ParseObject scrimmage = new ParseObject(ParseConstants.CLASS_SCRIMMAGES);
+            byte[] bytearray;
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            bytearray = stream.toByteArray();
+
             saveIntent.putExtra("locationLatitude", mFinalLocation.latitude);
             saveIntent.putExtra("locationLongitude", mFinalLocation.longitude);
             saveIntent.putExtra("address", mAddress);
+            saveIntent.putExtra("pictureByteArray", bytearray);
+            saveIntent.putExtra("from", "MapsActivity");
             startActivity(saveIntent);
         }
         return super.onOptionsItemSelected(item);

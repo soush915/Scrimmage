@@ -1,8 +1,6 @@
 package com.sousheelvunnam.scrimmage.adapters;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.SaveCallback;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.ui.ViewGameActivity;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
@@ -22,49 +17,31 @@ import com.sousheelvunnam.scrimmage.util.ParseConstants;
 import java.util.List;
 
 /**
- * Created by Sousheel on 12/23/2014.
+ * Created by Sousheel on 1/29/2015.
  */
-public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
     private List<ParseObject> gameList;
 
-    public GameAdapter (List<ParseObject> myGameList) {
+    @Override
+    public HomeAdapter.HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.game_list, parent, false);
+        return new HomeViewHolder(v);
+    }
+
+    public HomeAdapter(List<ParseObject> myGameList) {
         gameList = myGameList;
     }
 
     @Override
-    public GameAdapter.GameViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.game_card, parent, false);
-        return new GameViewHolder(v);
-    }
-
-    /**
-     * When data binds to view
-     * When data is shown in UI
-     */
-    @Override
-    public void onBindViewHolder(GameViewHolder holder, int position) {
+    public void onBindViewHolder(HomeViewHolder holder, int position) {
         //Put data from parse objects in here and set text for textviews
         final ParseObject game = gameList.get(position);
 
         holder.vTitle.setText(game.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
-        holder.vDescription.setText(game.getString(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION));
+        holder.vInfo.setText(game.getString(ParseConstants.KEY_FAVORITE_SPORT) + " - " + game.getDate(ParseConstants.KEY_SCRIMMAGE_DATE).toString());
 
-        final byte[] byteArray;
-        if (game.has(ParseConstants.KEY_SCRIMMAGE_PICTURE)) {
-            ParseFile file = game.getParseFile(ParseConstants.KEY_SCRIMMAGE_PICTURE);
-            try {
-                byteArray = file.getData();
-                Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                holder.vLocationImage.setImageBitmap(bmp);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            byteArray = null;
-        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +49,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
 
                 Intent intent = new Intent(v.getContext(), ViewGameActivity.class);
                 intent.putExtra("OBJECT_ID", scrimmage.getObjectId());
-                intent.putExtra(ParseConstants.KEY_CREATOR_USERNAME, scrimmage.getString(ParseConstants.KEY_CREATOR_USERNAME));
+                intent.putExtra(ParseConstants.KEY_CREATOR_USERNAME, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_TITLE, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION));
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_DATE, scrimmage.getDate(ParseConstants.KEY_SCRIMMAGE_DATE).getTime());
@@ -87,10 +64,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                     }
                 }
                 v.getContext().startActivity(intent);
-
             }
         });
-
     }
 
     @Override
@@ -98,18 +73,16 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         return gameList.size();
     }
 
-    public static class GameViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView vLocationImage;
+    public static class HomeViewHolder extends RecyclerView.ViewHolder {
+        protected ImageView vImage;
         protected TextView vTitle;
-        protected TextView vDescription;
-        protected ImageView vGoingImage1;
+        protected TextView vInfo;
 
-        public GameViewHolder(View v) {
+        public HomeViewHolder(View v) {
             super(v);
-            vLocationImage = (ImageView) v.findViewById(R.id.locationImage);
-            vTitle =  (TextView) v.findViewById(R.id.titleTextView);
-            vDescription = (TextView)  v.findViewById(R.id.descriptionCardTextView);
-            vGoingImage1 = (ImageView) v.findViewById(R.id.goingImageView1);
+            vImage = (ImageView) v.findViewById(R.id.sportListImageView);
+            vTitle =  (TextView) v.findViewById(R.id.titleListTextView);
+            vInfo = (TextView)  v.findViewById(R.id.infoListTextView);
         }
     }
 }
