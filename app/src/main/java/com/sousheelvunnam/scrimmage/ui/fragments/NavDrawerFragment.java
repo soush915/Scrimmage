@@ -90,6 +90,9 @@ public class NavDrawerFragment extends Fragment {
 
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
+
+        mMenu = R.menu.my;
+        mContext =  MyActivity.class.toString();
     }
 
     @Override
@@ -102,18 +105,6 @@ public class NavDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Bundle args = getArguments();
-        if (args != null) {
-            String context = getArguments().getString("context");
-            int menu = getArguments().getInt("menu");
-            mMenu = menu;
-            mContext = context;
-        }
-        else {
-            mMenu = R.menu.my;
-            mContext =  MyActivity.class.toString();
-        }
 
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_nav_drawer, container, false);
@@ -284,16 +275,7 @@ public class NavDrawerFragment extends Fragment {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
-        if (mContext.equals(MyActivity.class.toString())) {
-            actionBar.setTitle(getString(R.string.app_name));
-        }
-        else if (mContext.equals(GameActivity.class.toString())) {
-            actionBar.setTitle(R.string.title_activity_game);
-        }
-        else if (mContext.equals(MyAccountActivity.class.toString())) {
-            actionBar.setTitle(R.string.title_activity_my_account);
-        }
+        actionBar.setTitle(getString(R.string.app_name));
     }
 
     private ActionBar getActionBar() {

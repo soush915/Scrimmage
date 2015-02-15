@@ -1,7 +1,5 @@
 package com.sousheelvunnam.scrimmage.ui;
 
-import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,10 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -31,16 +27,14 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.adapters.GameAdapter;
-import com.sousheelvunnam.scrimmage.ui.fragments.NavDrawerFragment;
 import com.sousheelvunnam.scrimmage.ui.fragments.NavDrawerFragmentGames;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
 import java.util.Date;
 import java.util.List;
-import java.util.ListResourceBundle;
 
 public class GameActivity extends ActionBarActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AdapterView.OnItemSelectedListener, NavDrawerFragmentGames.NavigationDrawerCallbacks {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AdapterView.OnItemSelectedListener , NavDrawerFragmentGames.NavigationDrawerCallbacks {
 
     LatLng mLocation;
     GoogleApiClient mGoogleApiClient;
@@ -104,23 +98,6 @@ public class GameActivity extends ActionBarActivity implements
             }
         });
     }
-
-
-
-    /*@Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        ParseObject scrimmage = mScrimmages.get(position);
-
-        Intent intent = new Intent(this, ViewGameActivity.class);
-        //intent.putExtra("OBJECT_ID", scrimmage.getObjectId());
-        intent.putExtra(ParseConstants.KEY_CREATOR_USERNAME, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
-        intent.putExtra(ParseConstants.KEY_SCRIMMAGE_TITLE, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
-        intent.putExtra(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION));
-        intent.putExtra(ParseConstants.KEY_SCRIMMAGE_SPORT, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_SPORT));
-        startActivity(intent);
-    }*/
     /**
      * Start of stuff from Nav Drawer
      */
