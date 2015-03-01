@@ -89,7 +89,7 @@ public class GameActivity extends ActionBarActivity implements
                     //success
                     mScrimmages = scrimmages;
 
-                    GameAdapter adapter = new GameAdapter(mScrimmages);
+                    GameAdapter adapter = new GameAdapter(mScrimmages, GameActivity.this);
                     if (changed) {
                         adapter.notifyDataSetChanged();
                     }

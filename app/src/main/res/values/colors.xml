@@ -10,4 +10,12 @@
     <color name="color_primary_dark">#388E3C</color>
     <color name="accent_color">#69F0AE</color>
     <color name="text_color">#424242</color>
+
+    <color name="light_gray">#bbbbbb</color>
+
+
+    <color name="login_background_color">#2E993C</color>
+    <color name="auth_button_default">#cbeac8</color>
+    <color name="auth_button_focused">#b3e0ae</color>
+    <color name="auth_button_pressed">#8ec987</color>
 </resources>

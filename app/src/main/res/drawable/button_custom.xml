@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" >
+        <shape android:shape="rectangle">
+            <solid android:color="@color/login_background_color" />
+            <padding
+                android:left="8dp"
+                android:top="4dp"
+                android:right="8dp"
+                android:bottom="4dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/auth_button_default" />
+            <padding
+                android:left="8dp"
+                android:top="4dp"
+                android:right="8dp"
+                android:bottom="4dp" />
+        </shape>
+    </item>
+</selector>
+
+<!--<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/auth_button_pressed"
+        android:state_pressed="true" />
+    <item android:drawable="@color/auth_button_focused"
+        android:state_focused="true" />
+    <item android:drawable="@color/auth_button_default" />
+</selector>-->

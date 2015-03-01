@@ -2,79 +2,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/login_background_color"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.sousheelvunnam.scrimmage.ui.SignUpActivity">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/usernameField"
-        android:hint="@string/username_hint"
-        android:layout_below="@+id/nameEditText"
-        android:layout_alignParentEnd="true" />
+    <TextView
+        android:id="@+id/title"
+        style="@style/AuthTitle" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/passwordField"
-        android:hint="@string/password_hint"
-        android:layout_below="@+id/usernameField"
-        android:layout_alignParentStart="true" />
+    <TextView
+        android:id="@+id/subtitle"
+        style="@style/AuthTitle.AuthSubtitle" />
 
-    <EditText
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/editTextLayout"
+        style="@style/AuthFieldContainer"
+        android:layout_marginTop="50dp">
+
+        <EditText
+            android:id="@+id/usernameField"
+            android:hint="@string/username_hint"
+            style="@style/AuthEditText"/>
+
+        <EditText
+            android:id="@+id/passwordField"
+            style="@style/AuthEditText"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/emailField"
+            style="@style/AuthEditText"
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/favoriteSportEditText"
+            style="@style/AuthEditText"
+            android:hint="@string/favorite_sport_hint" />
+
+        <EditText
+            android:id="@+id/nameEditText"
+            style="@style/AuthEditText"
+            android:hint="@string/name_label"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/phoneEditText"
+            style="@style/AuthEditText"
+            android:hint="@string/phone_hint"
+            android:inputType="phone"
+            android:linksClickable="false" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/buttonDivider"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/emailField"
-        android:layout_below="@+id/passwordField"
+        android:layout_below="@+id/editTextLayout"
         android:layout_centerHorizontal="true"
-        android:hint="@string/email_hint"/>
+        android:src="@drawable/button_divider"/>
+
+
+
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/AuthButton"
         android:text="@string/sign_up_activity_login_button"
         android:id="@+id/signUpButton"
-        android:layout_marginTop="29dp"
-        android:layout_below="@+id/phoneEditText"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/editTextLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/buttonDivider"
+        android:layout_marginRight="0dp"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/favoriteSportEditText"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/emailField"
-        android:hint="@string/favorite_sport_hint"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="@string/name_label"
-        android:ems="10"
-        android:id="@+id/nameEditText"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="38dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/phoneEditText"
-        android:layout_below="@+id/favoriteSportEditText"
-        android:layout_alignParentStart="true"
-        android:linksClickable="false"
-        android:hint="@string/phone_hint"/>
-
+    <Button
+        style="@style/AuthButton"
+        android:text="@string/cancel_button_label"
+        android:id="@+id/cancelButton"
+        android:layout_below="@+id/editTextLayout"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/buttonDivider"
+        android:layout_marginLeft="0dp"/>
 </RelativeLayout>

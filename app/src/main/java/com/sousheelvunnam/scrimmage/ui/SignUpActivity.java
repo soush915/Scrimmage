@@ -1,6 +1,5 @@
 package com.sousheelvunnam.scrimmage.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,13 +31,17 @@ public class SignUpActivity extends ActionBarActivity implements
     protected EditText mFavoriteSport;
     protected EditText mPhone;
     private GoogleApiClient mGoogleApiClient;
+    private Button mCancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_sign_up);
         buildGoogleApiClient();
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         mUsername = (EditText) findViewById(R.id.usernameField);
         mPassword = (EditText) findViewById(R.id.passwordField);
@@ -47,8 +49,14 @@ public class SignUpActivity extends ActionBarActivity implements
         mName = (EditText) findViewById(R.id.nameEditText);
         mFavoriteSport = (EditText) findViewById(R.id.favoriteSportEditText);
         mPhone = (EditText) findViewById(R.id.phoneEditText);
-
         mSignUpButton = (Button) findViewById(R.id.signUpButton);
+        mCancelButton =(Button)findViewById(R.id.cancelButton);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +84,7 @@ public class SignUpActivity extends ActionBarActivity implements
                 }
                 else {
                     // create new user
-                    setProgressBarIndeterminateVisibility(true);
+                    setSupportProgressBarIndeterminateVisibility(true);
 
                     ParseUser newUser = new ParseUser();
                     newUser.setUsername(username);
@@ -97,7 +105,7 @@ public class SignUpActivity extends ActionBarActivity implements
                     newUser.signUpInBackground(new SignUpCallback() {
                         @Override
                         public void done(ParseException e) {
-                            setProgressBarIndeterminateVisibility(false);
+                            setSupportProgressBarIndeterminateVisibility(false);
 
                             if (e==null) {
                                 //Successful Sign Up

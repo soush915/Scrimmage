@@ -1,5 +1,7 @@
 package com.sousheelvunnam.scrimmage.util;
 
+import com.sousheelvunnam.scrimmage.R;
+
 /**
  * Created by Sousheel on 12/18/2014.
  */
@@ -27,4 +29,6 @@ public final class ParseConstants {
     public static final String KEY_BIO = "bio";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_PHONE = "phone";
+
+    public static final int SCRIMMAGE_LOGO_RESOURCE_ID = R.drawable.hipsterlogogenerator_1419366479942;
 }

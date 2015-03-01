@@ -1,5 +1,6 @@
 package com.sousheelvunnam.scrimmage.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,16 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.SaveCallback;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.ui.ViewGameActivity;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Sousheel on 12/23/2014.
@@ -27,9 +25,12 @@ import java.util.List;
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder> {
 
     private List<ParseObject> gameList;
+    private Context gameActivityContext;
+    private int mImageResourceID;
 
-    public GameAdapter (List<ParseObject> myGameList) {
+    public GameAdapter (List<ParseObject> myGameList, Context context) {
         gameList = myGameList;
+        gameActivityContext = context;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         holder.vTitle.setText(game.getString(ParseConstants.KEY_SCRIMMAGE_TITLE));
         holder.vDescription.setText(game.getString(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION));
 
-        final byte[] byteArray;
+        /*final byte[] byteArray;
         if (game.has(ParseConstants.KEY_SCRIMMAGE_PICTURE)) {
             ParseFile file = game.getParseFile(ParseConstants.KEY_SCRIMMAGE_PICTURE);
             try {
@@ -64,7 +65,11 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         }
         else {
             byteArray = null;
-        }
+        }*/
+        mImageResourceID = getImage(game.getString(ParseConstants.KEY_SCRIMMAGE_SPORT));
+        final Bitmap bitmap = BitmapFactory.decodeResource(gameActivityContext.getResources(), mImageResourceID);
+        holder.vLocationImage.setImageBitmap(bitmap);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,14 +83,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_DATE, scrimmage.getDate(ParseConstants.KEY_SCRIMMAGE_DATE).getTime());
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_SPORT, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_SPORT));
                 intent.putExtra(ParseConstants.KEY_SCRIMMAGE_ADDRESS, scrimmage.getString(ParseConstants.KEY_SCRIMMAGE_ADDRESS));
+                intent.putExtra(ParseConstants.KEY_SCRIMMAGE_PICTURE, mImageResourceID);
 
-                if (game.has(ParseConstants.KEY_SCRIMMAGE_PICTURE)) {
-                    try {
-                        intent.putExtra(ParseConstants.KEY_SCRIMMAGE_PICTURE, scrimmage.getParseFile(ParseConstants.KEY_SCRIMMAGE_PICTURE).getData());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
                 v.getContext().startActivity(intent);
 
             }
@@ -111,5 +110,50 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             vDescription = (TextView)  v.findViewById(R.id.descriptionCardTextView);
             vGoingImage1 = (ImageView) v.findViewById(R.id.goingImageView1);
         }
+    }
+    private int getImage(String sport) {
+        int bitmapResourceID = ParseConstants.SCRIMMAGE_LOGO_RESOURCE_ID;
+        Random randy = new Random();
+        int imageNumber;
+
+        if (sport.equalsIgnoreCase("Soccer")) {
+            imageNumber = randy.nextInt(7);
+            if (imageNumber ==  0) { bitmapResourceID = R.drawable.soccer;}
+            else if (imageNumber ==  1) { bitmapResourceID = R.drawable.soccer3;}
+            else if (imageNumber ==  2) { bitmapResourceID = R.drawable.soccer4;}
+            else if (imageNumber ==  3) { bitmapResourceID = R.drawable.soccer2;}
+            else if (imageNumber ==  4) { bitmapResourceID = R.drawable.soccer5;}
+            else if (imageNumber ==  5) { bitmapResourceID = R.drawable.soccer6;}
+            else if (imageNumber ==  6) { bitmapResourceID = R.drawable.soccer7;}
+        }
+        else if (sport.equalsIgnoreCase("Football")) {
+            imageNumber = randy.nextInt(4);
+            if (imageNumber ==  0) { bitmapResourceID = R.drawable.football;}
+            else if (imageNumber ==  1) { bitmapResourceID = R.drawable.football2;}
+            else if (imageNumber ==  2) { bitmapResourceID = R.drawable.football3;}
+            else if (imageNumber ==  3) { bitmapResourceID = R.drawable.football4;}
+        }
+        else if (sport.equalsIgnoreCase("Running")) {
+            imageNumber = randy.nextInt(4);
+            if (imageNumber ==  0) { bitmapResourceID = R.drawable.running;}
+            else if (imageNumber ==  1) { bitmapResourceID = R.drawable.running2;}
+            else if (imageNumber ==  2) { bitmapResourceID = R.drawable.running3;}
+            else if (imageNumber ==  3) { bitmapResourceID = R.drawable.running4;}
+        }
+        else if (sport.equalsIgnoreCase("Basketball")) {
+            imageNumber = randy.nextInt(3);
+            if (imageNumber ==  0) { bitmapResourceID = R.drawable.basketball;}
+            else if (imageNumber ==  1) { bitmapResourceID = R.drawable.basketball3;}
+            else if (imageNumber ==  2) { bitmapResourceID = R.drawable.basketball2;}
+        }
+        else if (sport.equalsIgnoreCase("Workout")) {
+            imageNumber = randy.nextInt(4);
+            if (imageNumber ==  0) { bitmapResourceID = R.drawable.workout;}
+            else if (imageNumber ==  1) { bitmapResourceID = R.drawable.workout2;}
+            else if (imageNumber ==  2) { bitmapResourceID = R.drawable.workout3;}
+            else if (imageNumber ==  3) { bitmapResourceID = R.drawable.workout4;}
+        }
+
+        return bitmapResourceID;
     }
 }

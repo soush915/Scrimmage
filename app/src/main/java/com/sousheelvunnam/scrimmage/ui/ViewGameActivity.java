@@ -1,10 +1,11 @@
 package com.sousheelvunnam.scrimmage.ui;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -22,7 +22,6 @@ import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
 import java.util.Date;
-import java.util.List;
 
 public class ViewGameActivity extends ActionBarActivity {
 
@@ -32,10 +31,11 @@ public class ViewGameActivity extends ActionBarActivity {
     private TextView descriptionTextView;
     private TextView dateTimeTextView;
     private TextView usernameTextView;
-    private TextView addreassTextView;
+    private TextView addressTextView;
     private Button directionsButton;
     private Button imGoingButton;
     private String address;
+    private ParseObject mScrimmage;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +48,9 @@ public class ViewGameActivity extends ActionBarActivity {
         dateTimeTextView = (TextView) findViewById(R.id.viewGameDateTimeTextView);
         usernameTextView = (TextView) findViewById(R.id.viewGameCreatorTextView);
         imGoingButton = (Button) findViewById(R.id.imGoingButton);
-        addreassTextView = (TextView) findViewById(R.id.viewGameAddressText);
+        addressTextView = (TextView) findViewById(R.id.viewGameAddressText);
         directionsButton = (Button) findViewById(R.id.directionsButton);
+        locationImage = (ImageView) findViewById(R.id.viewGameLocationImage);
 
         retrieveData();
 
@@ -61,16 +62,16 @@ public class ViewGameActivity extends ActionBarActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        final ParseObject finalGame = game;
+        mScrimmage = game;
 
         //if (finalGame.getString(ParseConstants))
         imGoingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (finalGame != null) {
-                    finalGame.addUnique(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
-                    finalGame.saveInBackground();
+                if (mScrimmage != null) {
+                    mScrimmage.addUnique(ParseConstants.KEY_RECIPIENTS_ID, ParseUser.getCurrentUser().getObjectId());
+                    mScrimmage.saveInBackground();
                     Toast.makeText(ViewGameActivity.this, R.string.im_going_success, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(ViewGameActivity.this, GameActivity.class);
                     startActivity(intent);
@@ -120,17 +121,22 @@ public class ViewGameActivity extends ActionBarActivity {
         String description = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_DESCRIPTION);
         String sport = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_SPORT);
         address = intent.getStringExtra(ParseConstants.KEY_SCRIMMAGE_ADDRESS);
-
+        int imageResourceID = intent.getIntExtra(ParseConstants.KEY_SCRIMMAGE_PICTURE, ParseConstants.SCRIMMAGE_LOGO_RESOURCE_ID);
 
         Date date = new Date();
         date.setTime(intent.getLongExtra(ParseConstants.KEY_SCRIMMAGE_DATE, -1));
 
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageResourceID);
+        locationImage.setImageBitmap(bitmap);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
         titleTextView.setText(title);
         descriptionTextView.setText(description);
-        sportTextView.setText(sport);
+        sportTextView.setText("Sport: " + sport);
         dateTimeTextView.setText(date.toString());
-        usernameTextView.setText(username);
-        addreassTextView.setText(address);
+        usernameTextView.setText("Organizer: " + username);
+        addressTextView.setText("Address: " + address);
     }
 
     /*private String[] retrieveData() {

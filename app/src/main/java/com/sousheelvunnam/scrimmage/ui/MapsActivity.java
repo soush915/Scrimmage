@@ -1,26 +1,21 @@
 package com.sousheelvunnam.scrimmage.ui;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,22 +27,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.sousheelvunnam.scrimmage.R;
 import com.sousheelvunnam.scrimmage.util.ParseConstants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
@@ -243,14 +230,14 @@ public class MapsActivity extends FragmentActivity implements
                  * city, and country name.
                  */
                 String addressText = String.format(
-                        "%s, %s, %s",
+                        "%s",
                         // If there's a street address, add it
                         mainAddress.getMaxAddressLineIndex() > 0 ?
-                                mainAddress.getAddressLine(0) : "",
-                        // Locality is usually a city
+                                mainAddress.getAddressLine(0) : ""
+                        /*, // Locality is usually a city
                         mainAddress.getLocality(),
                         // The country of the address
-                        mainAddress.getCountryName());
+                        mainAddress.getCountryName()*/);
                 // Return the text
                 return addressText;
             } else {

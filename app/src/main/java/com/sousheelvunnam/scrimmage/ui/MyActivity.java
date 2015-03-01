@@ -51,6 +51,11 @@ public class MyActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_my);
         buildGoogleApiClient();
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser == null) {
+            navigateToLogin();
+        }
+
         /*NavDrawer navDrawer = new NavDrawer();
         navDrawer.navDrawerOnCreate(this, getWindow().getDecorView().findViewById(android.R.id.content));*/
         mNavigationDrawerFragment = (NavDrawerFragment)
@@ -61,10 +66,7 @@ public class MyActivity extends ActionBarActivity implements
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser == null) {
-            navigateToLogin();
-        }
+
         mGoogleApiClient.connect();
 
         mCreateScrimmageButton = (Button) findViewById(R.id.homeCreateScrimmageButton);

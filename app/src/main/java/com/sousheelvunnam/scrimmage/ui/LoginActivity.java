@@ -1,9 +1,9 @@
 package com.sousheelvunnam.scrimmage.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +17,6 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.sousheelvunnam.scrimmage.R;
-import com.sousheelvunnam.scrimmage.ScrimmageApplication;
 
 public class LoginActivity extends ActionBarActivity {
 
@@ -29,7 +28,7 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
         mSignUpTextView = (TextView)findViewById(R.id.signUpTextView);
@@ -41,6 +40,9 @@ public class LoginActivity extends ActionBarActivity {
 
             }
         });
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         mUsername = (EditText) findViewById(R.id.usernameField);
         mPassword = (EditText) findViewById(R.id.passwordField);
@@ -65,11 +67,11 @@ public class LoginActivity extends ActionBarActivity {
                 }
                 else {
                     //Login
-                    setProgressBarIndeterminateVisibility(true);
+                    setSupportProgressBarIndeterminateVisibility(true);
                     ParseUser.logInInBackground(username, password, new LogInCallback() {
                         @Override
                         public void done(ParseUser parseUser, ParseException e) {
-                            setProgressBarIndeterminateVisibility(false);
+                            setSupportProgressBarIndeterminateVisibility(false);
 
                             if (e == null) {
                                 //Successful Login
